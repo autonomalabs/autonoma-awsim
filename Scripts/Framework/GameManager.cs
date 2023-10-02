@@ -41,7 +41,7 @@ public class GameManager : MonoBehaviour
     {
         if (Instance != null && Instance != this) 
         { 
-            Destroy(this); 
+            Destroy(this);
             return;
         } 
         else 
@@ -50,6 +50,7 @@ public class GameManager : MonoBehaviour
         }
 
         Settings = GetComponentInChildren<SettingsManager>();
+
         return;
     }
     
@@ -102,7 +103,7 @@ public class GameManager : MonoBehaviour
     }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
-    {
+    {        
         if (Status == SimulationState.MENU)
         {
             UIManager = FindObjectOfType<MenuUIManager>();

@@ -36,6 +36,12 @@ public class MainMenuController : MonoBehaviour
         SupportButton.onClick.AddListener( OnSupportPressed );
         BackButton.onClick.AddListener( OnBackPressed );
         QuitButton.onClick.AddListener( GameManager.Instance.UIManager.OnQuitPressed );
+
+        if(GameManager.Instance.Settings.shouldBypassMenu)
+        {
+            //GameManager.Instance.UIManager.OnScenarioMenuPressed();
+            //FindObjectOfType<MenuUIManager>().OnScenarioMenuPressed();
+        }
     }
 
     void OnSupportPressed()

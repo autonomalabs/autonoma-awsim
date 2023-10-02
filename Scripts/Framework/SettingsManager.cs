@@ -23,6 +23,7 @@ public class SettingsManager : MonoBehaviour
     public VehSetup myVehSetup = new VehSetup();
     public SensorSet mySensorSet = new SensorSet();
     public TrackParams myTrackParams;
+    public bool shouldBypassMenu = false;
 
     // Start is called before the first frame update
     void Start()

@@ -100,6 +100,11 @@ public class ScenarioMenuController : MonoBehaviour
         saveScenarioButtonPressed();
 
         sensorSetupButton.interactable = false;
+
+        if(GameManager.Instance.Settings.shouldBypassMenu)
+        {
+            driveButtonPressed();
+        }
     }
 
     private void OnEnable() {}

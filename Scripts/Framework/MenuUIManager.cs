@@ -35,7 +35,14 @@ public class MenuUIManager : BaseUIManager
 
     private void Start() 
     {
-        currentCanvas = MenuCanvas.MAINMENU;
+        if(GameManager.Instance.Settings.shouldBypassMenu)
+        {
+            currentCanvas = MenuCanvas.SCENARIO;
+        }
+        else
+        {
+            currentCanvas = MenuCanvas.MAINMENU;
+        }
     }
     protected override void CustomUpdate()
     {
