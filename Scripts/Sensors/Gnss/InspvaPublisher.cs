@@ -41,6 +41,11 @@ public class InspvaPublisher : Publisher<INSPVA>
     public ImuSimulator imuSim;
     public override void fillMsg()
     {
+        (ushort week, uint ms) weekMs = GnssSimulator.GetGPSWeekAndMS();
+
+        msg.Nov_header.Gps_week_number = weekMs.week;
+        msg.Nov_header.Gps_week_milliseconds = weekMs.ms;
+
         msg.Latitude = gnssSim.lat;
         msg.Longitude = gnssSim.lon;
         msg.Height = gnssSim.height;

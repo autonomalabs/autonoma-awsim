@@ -41,6 +41,10 @@ public class Heading2Publisher : Publisher<HEADING2>
     public Heading2Simulator heading2Sim;
     public override void fillMsg()
     {
+        (ushort week, uint ms) weekMs = GnssSimulator.GetGPSWeekAndMS();
+        msg.Nov_header.Gps_week_number = weekMs.week;
+        msg.Nov_header.Gps_week_milliseconds = weekMs.ms;
+        
         msg.Pos_type = new PositionOrVelocityType();
         msg.Pos_type.Type = 50;
         msg.Heading = heading2Sim.heading2;

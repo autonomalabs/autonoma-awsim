@@ -18,6 +18,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using VehicleDynamics;
+using System;
 
 public class GnssSimulator : MonoBehaviour
 {
@@ -56,6 +57,21 @@ public class GnssSimulator : MonoBehaviour
         vE = antennaVelGlobal[0];
         vN = antennaVelGlobal[1];
         vU = antennaVelGlobal[2];
+    }
+
+    public static (ushort, uint) GetGPSWeekAndMS()
+    {
+        double epoch = 3657.0 * 24.0 * 60.0 * 60.0;
+        double week_s = 604800;
+
+        // mimic unix time secs from 1970
+        TimeSpan t = (DateTime.UtcNow - new DateTime(1970, 1, 1));
+        double gps_time = t.TotalSeconds + 18.0 - epoch;
+        ushort weeks = (ushort)(gps_time / week_s);
+        double rem_seconds = gps_time - (weeks * week_s);
+        uint week_ms = (uint)(rem_seconds * 1000.0);
+
+        return (weeks, week_ms);
     }
 }
 
