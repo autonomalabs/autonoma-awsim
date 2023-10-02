@@ -40,6 +40,11 @@ public class BestvelPublisher : Publisher<BESTVEL>
     public GnssSimulator gnssSim;
     public override void fillMsg()
     {
+        (ushort week, uint ms) weekMs = GnssSimulator.GetGPSWeekAndMS();
+
+        msg.Nov_header.Gps_week_number = weekMs.week;
+        msg.Nov_header.Gps_week_milliseconds = weekMs.ms;
+
         msg.Vel_type = new PositionOrVelocityType();
         msg.Vel_type.Type = 50;
         msg.Latency = 0.0f;
