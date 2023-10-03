@@ -40,6 +40,11 @@ public class RawimuPublisher : Publisher<RAWIMU>
     public ImuSimulator imuSim;
     public override void fillMsg()
     {
+        (ushort week, uint ms) weekMs = GnssSimulator.GetGPSWeekAndMS();
+
+        msg.Nov_header.Gps_week_number = weekMs.week;
+        msg.Nov_header.Gps_week_milliseconds = weekMs.ms;
+
         msg.Linear_acceleration = new geometry_msgs.msg.Vector3();
         msg.Linear_acceleration.X = imuSim.imuAccel.x;
         msg.Linear_acceleration.Y = imuSim.imuAccel.y;
