@@ -99,7 +99,7 @@ public class CanParser
 					uint sign_ext = (uint)(0xFFFFFFFF << (int)signal.length);
 					unsigned_result |= sign_ext;
 
-			        Debug.Log("converting sign", null);
+			        //Debug.Log("converting sign", null);
 				}
 			}
 			result = (double)((int)unsigned_result); // Special Cast?

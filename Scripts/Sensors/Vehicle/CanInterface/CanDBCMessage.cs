@@ -62,7 +62,7 @@ public class CanMessageDef
         for(int i = 0; i < signals.Count; i++)
         {
             double v = CanParser.Unpack(data, signals[i]);
-            Debug.Log(name + $" unpacked: {v}", null);
+            //Debug.Log(name + $" unpacked: {v}", null);
             out_values.Add(v);
         }
 

@@ -113,12 +113,12 @@ public class CanSignalDef
 
         //Debug.Log("reveresed raw bits " + name + Convert.ToString((long)bits, 2).PadLeft(length, '0'), null);
         //Debug.Log("scale " + Convert.ToString(scale), null);
-        Debug.Log("offset " + Convert.ToString(offset), null);
+        //Debug.Log("offset " + Convert.ToString(offset), null);
         double base_value = (double)bits;
        // Debug.Log("unscaled value " + name + " " + Convert.ToString(base_value));
         double scaled = (base_value * scale) + offset;
 
-        Debug.Log(name + " value: " + Convert.ToString(scaled), null);
+        //Debug.Log(name + " value: " + Convert.ToString(scaled), null);
 
         return scaled;
     }
