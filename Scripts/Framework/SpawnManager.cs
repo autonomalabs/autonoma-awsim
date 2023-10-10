@@ -23,6 +23,8 @@ public class SpawnManager : MonoBehaviour
 {
     [SerializeField]
     private GameObject vehiclePrefab;
+    [SerializeField]
+    private GameObject vehiclePrefabLowPoly;
     public Material[] materials;
     public RaceControlMenuController raceControlMenu;
     private TrackParams trackParams;
@@ -58,17 +60,27 @@ public class SpawnManager : MonoBehaviour
 
     public void SpawnVehicle(int idx)
     {
-        GameObject vehicleInstance = Instantiate(vehiclePrefab, 
-            trackParams.carSpawnPositions[GameManager.Instance.Settings.myScenarioObj.Cars[idx].SpawnPositionIdx],
-            transform.rotation);
+        GameObject vehicleInstance;
+        if (GameManager.Instance.Settings.myTrackParams.TrackName == "Monza-LowPoly")
+        {
+            vehicleInstance = Instantiate(vehiclePrefabLowPoly, 
+                trackParams.carSpawnPositions[GameManager.Instance.Settings.myScenarioObj.Cars[idx].SpawnPositionIdx],
+                transform.rotation);
+        }
+        else
+        {
+            vehicleInstance = Instantiate(vehiclePrefab, 
+                trackParams.carSpawnPositions[GameManager.Instance.Settings.myScenarioObj.Cars[idx].SpawnPositionIdx],
+                transform.rotation);
+
+            Material[] mats = vehicleInstance.transform.Find("Models").Find("Body").Find("Chassis").GetComponent<MeshRenderer>().materials;
+            mats[0] = materials[(int) (GameManager.Instance.Settings.myScenarioObj.Cars[idx].Color) ];
+            vehicleInstance.transform.Find("Models").Find("Body").Find("Chassis").GetComponent<MeshRenderer>().materials = mats;
+        }
 
         vehicleInstance.transform.Rotate(trackParams.carRotation);
 
         raceControlMenu.rosCars.Add(vehicleInstance);
-
-        Material[] mats = vehicleInstance.transform.Find("Models").Find("Body").Find("Chassis").GetComponent<MeshRenderer>().materials;
-        mats[0] = materials[(int) (GameManager.Instance.Settings.myScenarioObj.Cars[idx].Color) ];
-        vehicleInstance.transform.Find("Models").Find("Body").Find("Chassis").GetComponent<MeshRenderer>().materials = mats;
 
         GameObject[] vehicleCameras = vehicleInstance.transform.Find("Cameras").GetComponent<CameraList>().cameras;
     
@@ -148,7 +160,26 @@ public class SpawnManager : MonoBehaviour
             }
 
             GameObject track = myLoadedAssetBundle.LoadAsset<GameObject>(trackName);
-            Instantiate(track);
+            GameObject instantiatedTrack = Instantiate(track);
+
+            // Check if the track is a LowPoly version
+            if (trackName.Contains("-LowPoly"))
+            {
+                DisableLights();
+            }
+        }
+    }
+
+    private void DisableLights()
+    {
+        // Disable all the light sources in the entire scene
+        Light[] lights = FindObjectsOfType<Light>();
+        foreach (Light light in lights)
+        {
+            if (light.type == LightType.Directional) // Check if it's a directional light
+            {
+                light.enabled = false;
+            }
         }
     }
 }
