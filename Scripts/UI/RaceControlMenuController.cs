@@ -38,7 +38,6 @@ public class RaceControlMenuController : MonoBehaviour
         vehFlagDropdown.onValueChanged.AddListener(delegate { vehFlagChanged(); } );
 
         vehFlagChanged();
-
     }
 
     void Update()
@@ -47,6 +46,12 @@ public class RaceControlMenuController : MonoBehaviour
         {
             vehFlagChanged();
             trackFlagChanged();
+
+            if(GameManager.Instance.Settings.shouldStartWithGreenFlag)
+            {
+                setGreenFlag();
+            }
+
             initialized = true;
         }
     }
@@ -64,6 +69,13 @@ public class RaceControlMenuController : MonoBehaviour
             raceControl.rc.TrackFlag = (byte)track_flag_vec[idx];
         }
     }
+
+    void setGreenFlag()
+    {
+        trackFlagDropdown.value = 2;
+        trackFlagChanged();
+    }
+
     void vehFlagChanged()
     {
         // All cars get same vehicle flag
