@@ -24,6 +24,7 @@ public class SettingsManager : MonoBehaviour
     public SensorSet mySensorSet = new SensorSet();
     public TrackParams myTrackParams;
     public bool shouldBypassMenu = false;
+    public bool shouldStartWithGreenFlag = false;
 
     // Start is called before the first frame update
     void Start()
