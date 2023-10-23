@@ -13,6 +13,7 @@ holders be liable for any claim, damages or other liability,
 whether in action of contract, tort or otherwise, arising from, 
 out of or in connection with the software or the use of the software.
 */
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -25,6 +26,8 @@ public class SettingsManager : MonoBehaviour
     public TrackParams myTrackParams;
     public bool shouldBypassMenu = false;
     public bool shouldStartWithGreenFlag = false;
+    public float greenFlagDelay = 0.0f; // if starting with green flag, delay before switching
+    public System.String menuSceneName = "MenuScene";
 
     // Start is called before the first frame update
     void Start()
