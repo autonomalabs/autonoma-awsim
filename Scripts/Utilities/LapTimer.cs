@@ -27,6 +27,7 @@ public class LapTimer : MonoBehaviour
 
     public bool newLapDetected;
     public RaceControl raceControl;
+
     void Start()
     {
         
@@ -53,6 +54,14 @@ public class LapTimer : MonoBehaviour
             }
             else
             {
+                // get car V to interp lap time
+                float dist = trackPosition.minDist;
+                // subtract from laptime dist / speed
+                float speed = GetVehicleForLap().GetSpeed();
+                float adjustment = dist / speed;
+                currLaptime -= adjustment;
+                Debug.Log($"adjusted lap time by {adjustment}s");
+
                 if ( currLaptime > 90f )
                 {
                     laptimes.Add(currLaptime);
@@ -78,5 +87,10 @@ public class LapTimer : MonoBehaviour
             raceControl.LapTime = currLaptime;
         }
         minIdxPrev = trackPosition.minIdx;
+    }
+
+    CarController GetVehicleForLap()
+    {
+        return FindObjectsOfType<CarController>()[0];
     }
 }
