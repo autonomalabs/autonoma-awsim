@@ -47,14 +47,27 @@ public class RaceControlMenuController : MonoBehaviour
             vehFlagChanged();
             trackFlagChanged();
 
-            if(GameManager.Instance.Settings.shouldStartWithGreenFlag)
+            if(GameManager.Instance.Settings.shouldStartWithGreenFlag &&
+                GameManager.Instance.Settings.greenFlagDelay == 0.0f)
             {
                 setGreenFlag();
+            }
+            else if(GameManager.Instance.Settings.shouldStartWithGreenFlag)
+            {
+                StartCoroutine(DelayedSetGreenFlag());
             }
 
             initialized = true;
         }
     }
+
+    private IEnumerator DelayedSetGreenFlag()
+    {
+        yield return new WaitForSeconds(GameManager.Instance.Settings.greenFlagDelay);
+        setGreenFlag();
+    }
+
+
     void OnDisable()
     {
         initialized = false;
