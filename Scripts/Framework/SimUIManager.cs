@@ -13,6 +13,7 @@ holders be liable for any claim, damages or other liability,
 whether in action of contract, tort or otherwise, arising from, 
 out of or in connection with the software or the use of the software.
 */
+using System;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using UnityEngine;
@@ -59,7 +60,8 @@ public class SimUIManager : BaseUIManager
 
     public override void OnMainMenuPressed()
     {
-        GameManager.Instance.StartCoroutine(GameManager.Instance.ChangeScene("MenuScene"));
+        String menuSceneName = GameManager.Instance.Settings.menuSceneName;
+        GameManager.Instance.StartCoroutine(GameManager.Instance.ChangeScene(menuSceneName));
         GameManager.Instance.ChangeStateTo(GameManager.SimulationState.MENU);
     }
 
