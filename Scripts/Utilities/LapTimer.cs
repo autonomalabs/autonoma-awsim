@@ -76,6 +76,12 @@ public class LapTimer : MonoBehaviour
                 raceControl.LapDistance = trackPosition.minIdx;
             }
 
+            int maxLaps = GameManager.Instance.Settings.maxLaps;
+            if(maxLaps > 0 && laptimes.Count - 1 == maxLaps)
+            {
+                Debug.Log($"Quitting due to max laps reached ({maxLaps})", this);
+                Application.Quit();
+            }
 
         }
         else

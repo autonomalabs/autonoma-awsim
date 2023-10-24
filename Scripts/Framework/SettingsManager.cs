@@ -29,6 +29,9 @@ public class SettingsManager : MonoBehaviour
     public float greenFlagDelay = 0.0f; // if starting with green flag, delay before switching
     public System.String menuSceneName = "MenuScene";
 
+    public float maxRunTime = 0.0f;
+    public int maxLaps = 0;
+
     // Start is called before the first frame update
     void Start()
     {

@@ -57,6 +57,12 @@ public class RaceControlMenuController : MonoBehaviour
                 StartCoroutine(DelayedSetGreenFlag());
             }
 
+            float runTimeout = GameManager.Instance.Settings.maxRunTime;
+            if(runTimeout > 0f)
+            {
+                StartCoroutine(RunTimeout());
+            }
+
             initialized = true;
         }
     }
@@ -65,6 +71,13 @@ public class RaceControlMenuController : MonoBehaviour
     {
         yield return new WaitForSeconds(GameManager.Instance.Settings.greenFlagDelay);
         setGreenFlag();
+    }
+
+    private IEnumerator RunTimeout()
+    {
+        yield return new WaitForSeconds(GameManager.Instance.Settings.maxRunTime);
+        Debug.Log($"Quitting due to max run length exceeded ({GameManager.Instance.Settings.maxRunTime}s)", this);
+        Application.Quit();
     }
 
 
