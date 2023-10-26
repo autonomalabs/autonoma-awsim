@@ -2,9 +2,8 @@ using System.Collections;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using System.IO;
-using System;
-
 
 
 public class NpcPathData
@@ -47,9 +46,10 @@ public class NpcPathData
             Vector3 start = new Vector3(positions[i][0], 1000, positions[i][2]);
             Vector3 end = new Vector3(positions[i][0], -1000, positions[i][2]);
             RaycastHit hit;
+            Vector3 backoff = new Vector3(0, 0.1f, 0);
             if(Physics.Linecast(start, end, out hit))
             {
-                positions[i] = hit.point;
+                positions[i] = hit.point + backoff;
             }
         }
     }
@@ -72,6 +72,11 @@ public class NpcPathData
         return changed;
     }
 
+    public Vector3 GetSegmentDirection()
+    {
+        return (GetNextPoint() - GetThisPoint()).normalized;
+    }
+
     public float GetSegmentDistance()
     {
         return Vector3.Distance(GetNextPoint(), GetThisPoint());
@@ -80,6 +85,11 @@ public class NpcPathData
     public Vector3 GetThisPoint()
     {
         return positions[currentIndex];
+    }
+
+    public Vector3 GetPoint(int offset)
+    {
+        return positions[(currentIndex + offset + positions.Count) % positions.Count];
     }
 
     public Vector3 GetNextPoint()
@@ -98,21 +108,28 @@ public class NpcPathData
 public class NpcSpawnManager : MonoBehaviour
 {
     public bool ShouldSpawnNPCs = false;
-    public LayerMask npcCollisionLayerMask;
     public GameObject NpcPrefab;
     public List<String> npcPathFiles = new List<String>();
     public List<NpcPathData> npcPaths = new List<NpcPathData>();
+    public float nextNpcMaxSpeed = 20.0f;
+    public float npcSpeedIncrement = 20.0f;
     bool pathsAreReady = false;
     NpcController currentNpc;
+
+    public float collisionTimePenalty = 5.0f;
+    public float collisionDebounceTime = 0.1f;
+
+    public float teleportNpcDistanceThreshold = -50.0f;
+    public float postTeleportNpcLeadDistance = 200.0f;
 
     public String PlayerVehicleObjectName;
     GameObject PlayerVehicle;
     TrackPositionFinder trackPosition;
+    LapTimer lapTimer;
     bool hasFoundRequiredObjects = false;
     public bool drawDebugGizmos = true;
 
-    // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         foreach(var s in npcPathFiles)
         {
@@ -120,13 +137,25 @@ public class NpcSpawnManager : MonoBehaviour
             pd.SnapPathHeight();
             npcPaths.Add(pd);
         }
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
 
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
         StartCoroutine(DelayedSnapPaths());
+    }
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        
+
+        //StartCoroutine(DelayedSnapPaths());
     }
 
     private IEnumerator DelayedSnapPaths()
     {
-        yield return new WaitForSeconds(3.0f);
+        yield return new WaitForSeconds(1.0f);
         foreach(var p in npcPaths)
         {
             p.SnapPathHeight();
@@ -150,11 +179,13 @@ public class NpcSpawnManager : MonoBehaviour
             else if(currentNpc)
             {
                 float distance = trackPosition.GetCarRelativeTrackDistance(currentNpc.transform.position);
-                Debug.Log($"relative npc distance: {distance}");
+                //Debug.Log($"relative npc distance: {distance}");
 
-                if(distance < -50)
+                if(distance < teleportNpcDistanceThreshold)
                 {
+                    nextNpcMaxSpeed += npcSpeedIncrement;
                     currentNpc.transform.position = GetSpawnPosition();
+                    currentNpc.maxSpeed = nextNpcMaxSpeed;
                 }
             }
         }
@@ -165,13 +196,17 @@ public class NpcSpawnManager : MonoBehaviour
         var prefab = Instantiate(NpcPrefab, GetSpawnPosition(), GetSpawnRotation());
         var prefabChildren = prefab.GetComponentsInChildren<NpcController>();
         currentNpc = prefabChildren[0];
-        currentNpc.collisionLayerMask = npcCollisionLayerMask;
         currentNpc.path = npcPaths[0];
+        currentNpc.trackPosition = trackPosition;
+        currentNpc.maxSpeed = nextNpcMaxSpeed;
+        currentNpc.lapTimer = lapTimer;
+        currentNpc.collisionTimePenalty = collisionTimePenalty;
+        currentNpc.collisionDebounceTime = collisionDebounceTime;
     }
 
     Vector3 GetSpawnPosition()
     {
-        return trackPosition.GetAheadPoint(-20) + new Vector3(0, 1, 0);
+        return trackPosition.GetAheadPoint(postTeleportNpcLeadDistance);
     }
 
     Quaternion GetSpawnRotation()
@@ -183,6 +218,7 @@ public class NpcSpawnManager : MonoBehaviour
     {
         PlayerVehicle = GameObject.Find(PlayerVehicleObjectName);
         var TpfFindResults = FindObjectsOfType<TrackPositionFinder>();
+        var lapTimers = FindObjectsOfType<LapTimer>();
         if(TpfFindResults.Length > 0)
         {
             trackPosition = TpfFindResults[0];
@@ -191,11 +227,16 @@ public class NpcSpawnManager : MonoBehaviour
         {
             //Debug.Log($"Npc Spawn Manager found player vehicle", this);
         }
+        if(lapTimers.Length > 0)
+        {
+            lapTimer = lapTimers[0];
+        }
         if(trackPosition)
         {
-            Debug.Log($"Npc Spawn Manager found track position", this);
+            //Debug.Log($"Npc Spawn Manager found track position", this);
         }
-        hasFoundRequiredObjects = PlayerVehicle != null && trackPosition != null;
+        hasFoundRequiredObjects = PlayerVehicle != null 
+            && trackPosition != null && lapTimer != null;
     }
 
     void OnDrawGizmos()

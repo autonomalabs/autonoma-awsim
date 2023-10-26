@@ -1488,12 +1488,12 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4673780220600108206}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c80c6e21b611cc2449f376867af28e52, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  carBody: {fileID: 4673780222355969127}
+  carBody: {fileID: 0}
   carController: {fileID: 4673780222355969126}
   axleTyreParams: {fileID: 11400000, guid: 3164c1bdbc9081c45962a0135df1107c, type: 2}
   mesh: {fileID: 7213999533342779875}
@@ -1655,12 +1655,12 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4673780220827395277}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c80c6e21b611cc2449f376867af28e52, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  carBody: {fileID: 4673780222355969127}
+  carBody: {fileID: 0}
   carController: {fileID: 4673780222355969126}
   axleTyreParams: {fileID: 11400000, guid: 415f597d8393ec54b837ddd026f2278b, type: 2}
   mesh: {fileID: 403958309483755995}
@@ -1730,7 +1730,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4673780221086385348}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.48999977, z: -3.315}
+  m_LocalPosition: {x: 0, y: 2.44, z: -6.97}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 5683117032532580583}
@@ -1955,12 +1955,12 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4673780221350970042}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c80c6e21b611cc2449f376867af28e52, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  carBody: {fileID: 4673780222355969127}
+  carBody: {fileID: 0}
   carController: {fileID: 4673780222355969126}
   axleTyreParams: {fileID: 11400000, guid: 3164c1bdbc9081c45962a0135df1107c, type: 2}
   mesh: {fileID: 835579116350698821}
@@ -2126,7 +2126,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4673780222355969113}
-  - component: {fileID: 4673780222355969127}
   - component: {fileID: 4673780222355969126}
   - component: {fileID: 1329770862387614506}
   m_Layer: 0
@@ -2159,22 +2158,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!54 &4673780222355969127
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4673780222355969112}
-  serializedVersion: 2
-  m_Mass: 700
-  m_Drag: 0
-  m_AngularDrag: 0
-  m_UseGravity: 1
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
 --- !u!114 &4673780222355969126
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2182,13 +2165,13 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4673780222355969112}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c26f01681b0b77d4184067fed66a9ee5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   vehicleParams: {fileID: 11400000, guid: 80148191985c575468da9551e3131b61, type: 2}
-  carBody: {fileID: 4673780222355969127}
+  carBody: {fileID: 0}
   throttleCmd: 0
   brakeCmd: 0
   steerAngleCmd: 0
@@ -2255,11 +2238,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c63aafd46f5622a3c9254e509ce55637, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 0.2
   collisionLayerMask:
     serializedVersion: 2
     m_Bits: 0
   drawDebugGizmos: 1
+  frontLeftWheel: {fileID: 281186570207560143}
+  frontRightWheel: {fileID: 403958309483755995}
+  rearLeftWheel: {fileID: 835579116350698821}
+  rearRightWheel: {fileID: 7213999533342779875}
+  wheelRadius: 0.3161124
 --- !u!1 &4673780222439462800
 GameObject:
   m_ObjectHideFlags: 0
@@ -2299,12 +2286,12 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4673780222439462800}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c80c6e21b611cc2449f376867af28e52, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  carBody: {fileID: 4673780222355969127}
+  carBody: {fileID: 0}
   carController: {fileID: 4673780222355969126}
   axleTyreParams: {fileID: 11400000, guid: 415f597d8393ec54b837ddd026f2278b, type: 2}
   mesh: {fileID: 281186570207560143}
@@ -2584,7 +2571,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &6957408036332851804
 Transform:
   m_ObjectHideFlags: 0
@@ -3958,7 +3945,7 @@ PrefabInstance:
     - target: {fileID: 963680755314333376, guid: 366a8b61e136ae146a42db9b7962f0cc, type: 3}
       propertyPath: rb
       value: 
-      objectReference: {fileID: 4673780222355969127}
+      objectReference: {fileID: 0}
     - target: {fileID: 963680757063669200, guid: 366a8b61e136ae146a42db9b7962f0cc, type: 3}
       propertyPath: gnssSim
       value: 
@@ -4030,7 +4017,7 @@ PrefabInstance:
     - target: {fileID: 5589552910299858068, guid: 366a8b61e136ae146a42db9b7962f0cc, type: 3}
       propertyPath: rb
       value: 
-      objectReference: {fileID: 4673780222355969127}
+      objectReference: {fileID: 0}
     - target: {fileID: 8371136751689468609, guid: 366a8b61e136ae146a42db9b7962f0cc, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.118
@@ -4277,7 +4264,7 @@ PrefabInstance:
     - target: {fileID: 66684186634756449, guid: 6f742e31da736fb4da26f7cc2f187ab0, type: 3}
       propertyPath: rb
       value: 
-      objectReference: {fileID: 4673780222355969127}
+      objectReference: {fileID: 0}
     - target: {fileID: 66684186844402362, guid: 6f742e31da736fb4da26f7cc2f187ab0, type: 3}
       propertyPath: m_Name
       value: Novatel PWRPAK7 Top
@@ -4377,7 +4364,7 @@ PrefabInstance:
     - target: {fileID: 4625322931684668550, guid: 6f742e31da736fb4da26f7cc2f187ab0, type: 3}
       propertyPath: rb
       value: 
-      objectReference: {fileID: 4673780222355969127}
+      objectReference: {fileID: 0}
     - target: {fileID: 5080850310666692010, guid: 6f742e31da736fb4da26f7cc2f187ab0, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.9949
@@ -4423,7 +4410,7 @@ PrefabInstance:
     - target: {fileID: 66684186634756449, guid: 6f742e31da736fb4da26f7cc2f187ab0, type: 3}
       propertyPath: rb
       value: 
-      objectReference: {fileID: 4673780222355969127}
+      objectReference: {fileID: 0}
     - target: {fileID: 66684186844402362, guid: 6f742e31da736fb4da26f7cc2f187ab0, type: 3}
       propertyPath: m_Name
       value: Novatel PWRPAK7 Bottom
@@ -4491,7 +4478,7 @@ PrefabInstance:
     - target: {fileID: 4625322931684668550, guid: 6f742e31da736fb4da26f7cc2f187ab0, type: 3}
       propertyPath: rb
       value: 
-      objectReference: {fileID: 4673780222355969127}
+      objectReference: {fileID: 0}
     - target: {fileID: 5080850310666692010, guid: 6f742e31da736fb4da26f7cc2f187ab0, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
