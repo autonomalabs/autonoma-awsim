@@ -2238,15 +2238,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c63aafd46f5622a3c9254e509ce55637, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxSpeed: 50
   collisionLayerMask:
     serializedVersion: 2
     m_Bits: 0
+  collisionTimePenalty: 0
   drawDebugGizmos: 1
   frontLeftWheel: {fileID: 281186570207560143}
   frontRightWheel: {fileID: 403958309483755995}
   rearLeftWheel: {fileID: 835579116350698821}
   rearRightWheel: {fileID: 7213999533342779875}
+  frontLeftSocket: {fileID: 4673780222439462800}
+  frontRightSocket: {fileID: 4673780220827395277}
   wheelRadius: 0.3161124
+  collisionDebounceTime: 0.1
+  trackPosition: {fileID: 0}
+  lapTimer: {fileID: 0}
 --- !u!1 &4673780222439462800
 GameObject:
   m_ObjectHideFlags: 0

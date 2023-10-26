@@ -14,6 +14,7 @@ public class NpcController : MonoBehaviour
     float ellapsedInterp = 0.0f;
     float nextInterpTime;
     float turnLeft = 0.0f;
+    Quaternion tireRot;
     public float collisionTimePenalty = 0.0f;
 
     public bool drawDebugGizmos = false;
@@ -24,6 +25,8 @@ public class NpcController : MonoBehaviour
     public GameObject frontRightWheel;
     public GameObject rearLeftWheel;
     public GameObject rearRightWheel;
+    public GameObject frontLeftSocket;
+    public GameObject frontRightSocket;
     public float wheelRadius;
 
     public float collisionDebounceTime = 0.1f;
@@ -129,6 +132,8 @@ public class NpcController : MonoBehaviour
 
     void TickRotation()
     {
+        Vector3 nextDir = path.GetPoint(2) - path.GetPoint(1);
+        Quaternion nextRot = Quaternion.LookRotation(nextDir, Vector3.up);
         Vector3 prevDir = path.GetThisPoint() - path.GetPoint(-2);
         Vector3 dir = (path.GetNextPoint() - path.GetPrevPoint()).normalized;
 
@@ -140,8 +145,14 @@ public class NpcController : MonoBehaviour
 
         turnLeft = Mathf.Abs(Vector3.SignedAngle(prevDir, dir, Vector3.up));
 
+        //tireRot = targetRot;
+
         float ratio = (segmentDist - (nextPointDist - segmentDist / 2.0f)) / segmentDist;
 
+        if(ratio > 0.0f)
+        {
+            tireRot = Quaternion.Lerp(tireRot, nextRot, ratio / 2.0f);
+        }
         transform.rotation = Quaternion.Lerp(prevRot, targetRot, ratio);
         //transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRot, 150.0f * Time.deltaTime);
         //transform.rotation = targetRot;
@@ -165,6 +176,15 @@ public class NpcController : MonoBehaviour
         SnapObjectToGround(frontLeftWheel, wheelRadius);
         SnapObjectToGround(rearRightWheel, wheelRadius);
         SnapObjectToGround(rearLeftWheel, wheelRadius);
+
+        float omega = speed;
+        frontRightWheel.transform.Rotate(Vector3.right, Time.deltaTime*180/(Mathf.PI)*omega);
+        frontLeftWheel.transform.Rotate(Vector3.right, Time.deltaTime*180/(Mathf.PI)*omega);
+        rearRightWheel.transform.Rotate(Vector3.right, Time.deltaTime*180/(Mathf.PI)*omega);
+        rearLeftWheel.transform.Rotate(Vector3.right, Time.deltaTime*180/(Mathf.PI)*omega);
+
+        frontLeftSocket.transform.rotation = tireRot;
+        frontRightSocket.transform.rotation = tireRot;
     }
 
     void SnapObjectToGround(GameObject o, float offset)
