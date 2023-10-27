@@ -57,8 +57,9 @@ public class RaceControlMenuController : MonoBehaviour
                 StartCoroutine(DelayedSetGreenFlag());
             }
 
+            bool isPractice = GameManager.Instance.Settings.isPracticeRun;
             float runTimeout = GameManager.Instance.Settings.maxRunTime;
-            if(runTimeout > 0f)
+            if(runTimeout > 0f && !isPractice)
             {
                 StartCoroutine(RunTimeout());
             }
