@@ -28,9 +28,12 @@ public class SettingsManager : MonoBehaviour
     public bool shouldStartWithGreenFlag = false;
     public float greenFlagDelay = 0.0f; // if starting with green flag, delay before switching
     public System.String menuSceneName = "MenuScene";
+    public bool useLapTimeInterpolationAdjustment = true;
 
     public float maxRunTime = 0.0f;
     public int maxLaps = 0;
+
+    public bool isPracticeRun = true;
 
     // Start is called before the first frame update
     void Start()
@@ -43,4 +46,5 @@ public class SettingsManager : MonoBehaviour
     {
         
     }
+
 }
