@@ -10,6 +10,7 @@ public class NpcController : MonoBehaviour
     public float maxSpeed = 50.0f;
     private float speed = 0.0f;
     private float accel = 10.0f;
+    private float decel = 30.0f;
     public LayerMask collisionLayerMask;
     float ellapsedInterp = 0.0f;
     float nextInterpTime;
@@ -17,7 +18,7 @@ public class NpcController : MonoBehaviour
     Quaternion tireRot;
     public float collisionTimePenalty = 0.0f;
 
-    public bool drawDebugGizmos = false;
+    public bool drawDebugGizmos = true;
     CarController carController;
     bool foundCarController = false;
 
@@ -31,6 +32,7 @@ public class NpcController : MonoBehaviour
 
     public float collisionDebounceTime = 0.1f;
     bool collisionDebounce = false;
+    Vector3 collisionBox = new Vector3(2, 1, 3);
 
     public TrackPositionFinder trackPosition;
     public LapTimer lapTimer;
@@ -39,7 +41,8 @@ public class NpcController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //transform.position = path.GetThisPoint();
+        path.UpdateIndex(transform.position);
+        transform.position = path.GetThisPoint();
     }
 
     // Update is called once per frame
@@ -67,11 +70,12 @@ public class NpcController : MonoBehaviour
     {
         //Debug.Log($"desired speed {GetDesiredSpeed()}");
         float speedError = GetDesiredSpeed() - speed;
-        if(Mathf.Abs(speedError) <= accel * Time.deltaTime)
+        float a = speedError > 0 ? accel : decel;
+        if(Mathf.Abs(speedError) <= a * Time.deltaTime)
         {
             speed = GetDesiredSpeed();
         }
-        speed += Mathf.Sign(speedError) * accel * Time.deltaTime;
+        speed += Mathf.Sign(speedError) * a * Time.deltaTime;
         speed = Mathf.Clamp(speed, 0.0f, maxSpeed);
 
         Vector3 newPos = transform.position + GetVelocity() * Time.deltaTime;
@@ -86,8 +90,8 @@ public class NpcController : MonoBehaviour
 
     void CheckOverlaps()
     {
-        Collider[] hitColliders = Physics.OverlapBox(gameObject.transform.position + new Vector3(0, 1, 0), 
-            new Vector3(2, 1, 3), transform.rotation);
+        Collider[] hitColliders = Physics.OverlapBox(transform.position + new Vector3(0, 1, 0), 
+            collisionBox, transform.rotation);
         int i = 0;
         //Check when there is a new collider coming into contact with the box
         while (i < hitColliders.Length)
@@ -101,7 +105,7 @@ public class NpcController : MonoBehaviour
             {
                 collisionDebounce = true;
                 Debug.Log("PLAYER COLLISION", this);
-                lapTimer.currLaptime += collisionTimePenalty;
+                //lapTimer.currLaptime += collisionTimePenalty;
                 StartCoroutine(ResetCollisionDebounce());
             }
             i++;
@@ -122,7 +126,8 @@ public class NpcController : MonoBehaviour
 
     float GetDesiredSpeed()
     {
-        return (maxSpeed - (maxSpeed * GetTurnBrakeIndex())) - (maxSpeed * GetDistFromPlayerBrakeIndex());
+
+        return maxSpeed - Mathf.Max(maxSpeed * GetTurnBrakeIndex(), maxSpeed * GetDistFromPlayerBrakeIndex());
     }
 
     void CheckDespawn()
@@ -205,16 +210,18 @@ public class NpcController : MonoBehaviour
     {
         float totalTurn = 0.0f;
 
-        Vector3 d0 = (path.GetPoint(1) - path.GetPoint(-1)).normalized;
+        Vector3 d0 = (path.GetPoint(1) - path.GetPoint(-2)).normalized;
         Vector3 d1 = (path.GetPoint(3) - path.GetPoint(1)).normalized;
         Vector3 d2 = (path.GetPoint(10) - path.GetPoint(7)).normalized;
+        Vector3 d3 = (path.GetPoint(14) - path.GetPoint(10)).normalized;
 
-        totalTurn += Mathf.Abs(Vector3.SignedAngle(d0, d1, Vector3.up));
+        //totalTurn += Mathf.Abs(Vector3.SignedAngle(d0, d1, Vector3.up));
         totalTurn += Mathf.Abs(Vector3.SignedAngle(d1, d2, Vector3.up));
+        totalTurn += Mathf.Abs(Vector3.SignedAngle(d2, d3, Vector3.up));
         //totalTurn += Mathf.Abs(Vector3.SignedAngle(path.GetPoint(1), path.GetPoint(3), Vector3.up));
         //totalTurn += Mathf.Abs(Vector3.SignedAngle(path.GetPoint(3), path.GetPoint(4), Vector3.up));
-        float brakeIndex = totalTurn / 90.0f;
-        return Mathf.Clamp(brakeIndex, 0.0f, 0.9f);
+        float brakeIndex = (totalTurn - 10.0f) / 60.0f;
+        return Mathf.Clamp(brakeIndex, 0.0f, 0.8f);
     }
 
     float GetDistFromPlayerBrakeIndex()
@@ -228,11 +235,13 @@ public class NpcController : MonoBehaviour
     {
         if(drawDebugGizmos && path != null)
         {
+            Gizmos.matrix = transform.localToWorldMatrix;
             Gizmos.color = Color.red;
             Gizmos.DrawSphere(path.GetNextPoint(), 1.2f);
             Gizmos.DrawRay(transform.position, path.GetNextPoint());
 
-            //Gizmos.DrawCube(transform.position + new Vector3(0, 1, 0), new Vector3(2, 1, 3));
+            Gizmos.DrawWireCube(Vector3.zero, collisionBox);
+            //Gizmos.DrawCube(transform.position + new Vector3(0, 1, 0), collisionBox);
         }
     }
 }
