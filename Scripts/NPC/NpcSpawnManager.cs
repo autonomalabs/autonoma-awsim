@@ -39,8 +39,9 @@ public class NpcPathData
         }
     }
 
-    public void SnapPathHeight()
+    public bool SnapPathHeight()
     {
+        int hitCount = 0;
         for(int i = 0; i < positions.Count; i++)
         {
             Vector3 start = new Vector3(positions[i][0], 1000, positions[i][2]);
@@ -49,9 +50,11 @@ public class NpcPathData
             Vector3 backoff = new Vector3(0, 0.1f, 0);
             if(Physics.Linecast(start, end, out hit))
             {
+                hitCount++;
                 positions[i] = hit.point + backoff;
             }
         }
+        return ((float)hitCount / (float)positions.Count) > 0.8;
     }
 
     public bool UpdateIndex(Vector3 pos)
@@ -107,7 +110,7 @@ public class NpcPathData
 
 public class NpcSpawnManager : MonoBehaviour
 {
-    public bool ShouldSpawnNPCs = false;
+    public bool shouldSpawnNPCs = false;
     public GameObject NpcPrefab;
     public List<String> npcPathFiles = new List<String>();
     public List<NpcPathData> npcPaths = new List<NpcPathData>();
@@ -156,11 +159,13 @@ public class NpcSpawnManager : MonoBehaviour
     private IEnumerator DelayedSnapPaths()
     {
         yield return new WaitForSeconds(1.0f);
+        bool pathsOk = true;
         foreach(var p in npcPaths)
         {
-            p.SnapPathHeight();
+            pathsOk &= p.SnapPathHeight();
+
         }
-        pathsAreReady = true;
+        pathsAreReady = pathsOk;
     }
 
     // Update is called once per frame
@@ -172,7 +177,7 @@ public class NpcSpawnManager : MonoBehaviour
         }
         else
         {
-            if(!currentNpc && pathsAreReady)
+            if(!currentNpc && pathsAreReady && shouldSpawnNPCs)
             {
                 SpawnNpc();
             }
