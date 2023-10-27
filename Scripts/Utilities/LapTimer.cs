@@ -54,13 +54,19 @@ public class LapTimer : MonoBehaviour
             }
             else
             {
-                // get car V to interp lap time
-                float dist = trackPosition.minDist;
-                // subtract from laptime dist / speed
-                float speed = GetVehicleForLap().GetSpeed();
-                float adjustment = dist / speed;
-                currLaptime -= adjustment;
-                Debug.Log($"adjusted lap time by {adjustment}s");
+                if(GameManager.Instance.Settings.useLapTimeInterpolationAdjustment)
+                {
+                    // get car V to interp lap time
+                    float dist = trackPosition.minDist;
+                    // subtract from laptime dist / speed
+                    float speed = GetVehicleForLap().GetSpeed();
+                    if(speed > 0.0f)
+                    {
+                        float adjustment = dist / speed;
+                        currLaptime -= adjustment;
+                    }
+                    //Debug.Log($"adjusted lap time by {adjustment}s");
+                }
 
                 if ( currLaptime > 90f )
                 {
@@ -76,8 +82,9 @@ public class LapTimer : MonoBehaviour
                 raceControl.LapDistance = trackPosition.minIdx;
             }
 
+            bool isPractice = GameManager.Instance.Settings.isPracticeRun;
             int maxLaps = GameManager.Instance.Settings.maxLaps;
-            if(maxLaps > 0 && laptimes.Count - 1 == maxLaps)
+            if(!isPractice && maxLaps > 0 && laptimes.Count - 1 == maxLaps)
             {
                 Debug.Log($"Quitting due to max laps reached ({maxLaps})", this);
                 Application.Quit();
