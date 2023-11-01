@@ -32,6 +32,7 @@ public class SettingsManager : MonoBehaviour
 
     public float maxRunTime = 0.0f;
     public int maxLaps = 0;
+    public bool exitOnCompletion = false;
 
     public bool isPracticeRun = true;
 
