@@ -28,6 +28,10 @@ public class LapTimer : MonoBehaviour
     public bool newLapDetected;
     public RaceControl raceControl;
 
+    public delegate void OnLapCompletedDelegate(float lapTime);
+    public OnLapCompletedDelegate onLapCompleted;
+
+
     void Start()
     {
         
@@ -74,6 +78,7 @@ public class LapTimer : MonoBehaviour
                 if ( currLaptime > 90f )
                 {
                     laptimes.Add(currLaptime);
+                    onLapCompleted(currLaptime);
                 }
             }
           
@@ -91,7 +96,7 @@ public class LapTimer : MonoBehaviour
             if(!isPractice && maxLaps > 0 && laptimes.Count - 1 == maxLaps)
             {
                 Debug.Log($"Reset due to max laps reached ({maxLaps})", this);
-                GameManager.Instance.OnResetEvent(GameResetReason.Timeout);
+                GameManager.Instance.OnResetEvent(GameResetReason.RaceComplete);
             }
 
         }
