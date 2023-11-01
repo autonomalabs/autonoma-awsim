@@ -63,7 +63,10 @@ public class LapTimer : MonoBehaviour
                     if(speed > 0.0f)
                     {
                         float adjustment = dist / speed;
-                        currLaptime -= adjustment;
+                        if(adjustment > 0.0 && adjustment < 0.1) // prevent erroneous adjustments
+                        {
+                            currLaptime -= adjustment;
+                        }
                     }
                     //Debug.Log($"adjusted lap time by {adjustment}s");
                 }
@@ -84,10 +87,11 @@ public class LapTimer : MonoBehaviour
 
             bool isPractice = GameManager.Instance.Settings.isPracticeRun;
             int maxLaps = GameManager.Instance.Settings.maxLaps;
+
             if(!isPractice && maxLaps > 0 && laptimes.Count - 1 == maxLaps)
             {
-                Debug.Log($"Quitting due to max laps reached ({maxLaps})", this);
-                Application.Quit();
+                Debug.Log($"Reset due to max laps reached ({maxLaps})", this);
+                GameManager.Instance.OnResetEvent(GameResetReason.Timeout);
             }
 
         }
