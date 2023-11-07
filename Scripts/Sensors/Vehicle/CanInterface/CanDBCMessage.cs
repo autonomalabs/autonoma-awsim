@@ -29,7 +29,7 @@ public class CanMessageDef
         int i = 1;
         id = ulong.Parse(message_match.Groups[i++].Value);
         name = message_match.Groups[i++].Value;
-        length = (byte)ushort.Parse(message_match.Groups[i++].Value);
+        length =  8;//(byte)ushort.Parse(message_match.Groups[i++].Value);
         sender = message_match.Groups[i++].Value;
         signals = CanSignalDef.Parse(entry_match);
 
@@ -45,9 +45,7 @@ public class CanMessageDef
         for(int i = 0; i < signals.Count; i++)
         {
             CanParser.Pack(ref data_field, signal_data[i], signals[i]);
-        }
-
-        //Debug.Log(name + " packed bits: " + BitStream.get_byte_string(data_field), null);
+        }        
 
         for(int i = 0; i < 8; i++)
         {

@@ -38,6 +38,11 @@ public class VehicleDataPublisher : Publisher<VehicleData>
     public CanPublisher canAccelReportPublisher;
     public CanPublisher canSteerReportPublisher;
 
+    public CanPublisher canRRTireTempPublisher;
+    public CanPublisher canRLTireTempPublisher;
+    public CanPublisher canFRTireTempPublisher;
+    public CanPublisher canFLTireTempPublisher;
+
     public CanPublisher canBrakePressureReportPublisher;
     public CanPublisher canWheelSpeedReportPublisher;
 
@@ -63,6 +68,11 @@ public class VehicleDataPublisher : Publisher<VehicleData>
         canFRTirePressurePublisher = new CanPublisher("Tire_Pressure_FR", rosNamespace, qosSettings);
         canFLTirePressurePublisher = new CanPublisher("Tire_Pressure_FL", rosNamespace, qosSettings);
 
+        canRRTireTempPublisher = new CanPublisher("Tire_Temp_RR_1", rosNamespace, qosSettings);
+        canRLTireTempPublisher = new CanPublisher("Tire_Temp_RL_1", rosNamespace, qosSettings);
+        canFRTireTempPublisher = new CanPublisher("Tire_Temp_FR_1", rosNamespace, qosSettings);
+        canFLTireTempPublisher = new CanPublisher("Tire_Temp_FL_1", rosNamespace, qosSettings);
+
         canMiscReportPublisher = new CanPublisher("misc_report", rosNamespace, qosSettings);
         canAccelReportPublisher = new CanPublisher("accelerator_report", rosNamespace, qosSettings);
         canSteerReportPublisher = new CanPublisher("steering_report", rosNamespace, qosSettings);
@@ -84,6 +94,34 @@ public class VehicleDataPublisher : Publisher<VehicleData>
             vehSim.rl_wheel_load,
             vehSim.fr_wheel_load,
             vehSim.fr_wheel_load
+        });
+
+        canRRTireTempPublisher.Publish(new List<double>{
+            vehSim.rr_tire_temperature,
+            vehSim.rr_tire_temperature,
+            vehSim.rr_tire_temperature,
+            vehSim.rr_tire_temperature
+        });
+
+        canRLTireTempPublisher.Publish(new List<double>{
+            vehSim.rl_tire_temperature,
+            vehSim.rl_tire_temperature,
+            vehSim.rl_tire_temperature,
+            vehSim.rl_tire_temperature
+        });
+
+        canFRTireTempPublisher.Publish(new List<double>{
+            vehSim.fr_tire_temperature,
+            vehSim.fr_tire_temperature,
+            vehSim.fr_tire_temperature,
+            vehSim.fr_tire_temperature
+        });
+
+        canFLTireTempPublisher.Publish(new List<double>{
+            vehSim.fl_tire_temperature,
+            vehSim.fl_tire_temperature,
+            vehSim.fl_tire_temperature,
+            vehSim.fl_tire_temperature
         });
 
         canRRTirePressurePublisher.Publish(new List<double>{
@@ -111,22 +149,24 @@ public class VehicleDataPublisher : Publisher<VehicleData>
             vehSim.safety_switch_state,
             vehSim.mode_switch_state ? 1.0 : 0.0, // probably has roundoff issues
             vehSim.sys_state,
-            0.0// rolling counter missing here?
+            canMiscReportPublisher.GetCounterNext()// rolling counter missing here?
         });
 
 
         canAccelReportPublisher.Publish(new List<double>{
-            0.0, // counter
+            canAccelReportPublisher.GetCounterNext(), // counter
             vehSim.accel_pedal_output
         });
 
         canSteerReportPublisher.Publish(new List<double>{
-            0.0, // counter
+            canSteerReportPublisher.GetCounterNext(), // counter
             vehSim.steering_wheel_angle
         });
 
+        Debug.Log($"publishing steer angle {vehSim.steering_wheel_angle}");
+
         canBrakePressureReportPublisher.Publish(new List<double>{
-            0.0, // counter
+            canBrakePressureReportPublisher.GetCounterNext(), // counter
             vehSim.rear_brake_pressure,
             vehSim.front_brake_pressure
         });
