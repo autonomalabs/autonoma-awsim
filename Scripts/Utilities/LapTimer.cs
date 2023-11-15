@@ -78,7 +78,10 @@ public class LapTimer : MonoBehaviour
                 if ( currLaptime > 90f )
                 {
                     laptimes.Add(currLaptime);
-                    onLapCompleted(currLaptime);
+                    if(onLapCompleted != null)
+                    {
+                        onLapCompleted(currLaptime);
+                    }
                 }
             }
           
