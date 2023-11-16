@@ -210,4 +210,10 @@ public class CarController : MonoBehaviour
         calcEngineTorque();
         applyAeroForces();
     }
+
+    public float GetSpeed()
+    {
+        float[] v = vehicleState.V;
+        return new Vector3(v[0], v[1], v[2]).magnitude;
+    }
 }

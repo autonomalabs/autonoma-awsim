@@ -27,6 +27,11 @@ public class LapTimer : MonoBehaviour
 
     public bool newLapDetected;
     public RaceControl raceControl;
+
+    public delegate void OnLapCompletedDelegate(float lapTime);
+    public OnLapCompletedDelegate onLapCompleted;
+
+
     void Start()
     {
         
@@ -53,9 +58,27 @@ public class LapTimer : MonoBehaviour
             }
             else
             {
+                if(GameManager.Instance.Settings.useLapTimeInterpolationAdjustment)
+                {
+                    // get car V to interp lap time
+                    float dist = trackPosition.minDist;
+                    // subtract from laptime dist / speed
+                    float speed = GetVehicleForLap().GetSpeed();
+                    if(speed > 0.0f)
+                    {
+                        float adjustment = dist / speed;
+                        if(adjustment > 0.0 && adjustment < 0.1) // prevent erroneous adjustments
+                        {
+                            currLaptime -= adjustment;
+                        }
+                    }
+                    //Debug.Log($"adjusted lap time by {adjustment}s");
+                }
+
                 if ( currLaptime > 90f )
                 {
                     laptimes.Add(currLaptime);
+                    onLapCompleted(currLaptime);
                 }
             }
           
@@ -67,6 +90,14 @@ public class LapTimer : MonoBehaviour
                 raceControl.LapDistance = trackPosition.minIdx;
             }
 
+            bool isPractice = GameManager.Instance.Settings.isPracticeRun;
+            int maxLaps = GameManager.Instance.Settings.maxLaps;
+
+            if(!isPractice && maxLaps > 0 && laptimes.Count - 1 == maxLaps)
+            {
+                Debug.Log($"Reset due to max laps reached ({maxLaps})", this);
+                GameManager.Instance.OnResetEvent(GameResetReason.RaceComplete);
+            }
 
         }
         else
@@ -78,5 +109,10 @@ public class LapTimer : MonoBehaviour
             raceControl.LapTime = currLaptime;
         }
         minIdxPrev = trackPosition.minIdx;
+    }
+
+    CarController GetVehicleForLap()
+    {
+        return FindObjectsOfType<CarController>()[0];
     }
 }

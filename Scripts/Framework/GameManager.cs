@@ -18,12 +18,24 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Events;
+using System;
+
+public enum GameResetReason
+{
+    UserInput,
+    Timeout,
+    RaceComplete
+}
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance {get; private set;}
     public SettingsManager Settings {get; private set;}
     public BaseUIManager UIManager {get; private set;}
+
+    public delegate void OnResetEventDelegate(GameResetReason reason);
+
+    public OnResetEventDelegate onGameResetDelegate;
     
     public enum SimulationState
     {
@@ -52,6 +64,23 @@ public class GameManager : MonoBehaviour
         Settings = GetComponentInChildren<SettingsManager>();
 
         return;
+    }
+
+    public void OnResetEvent(GameResetReason reason)
+    {
+        onGameResetDelegate(reason);
+
+        if(Settings.exitOnCompletion)
+        {
+            Application.Quit();
+        }
+        else
+        {
+            String menuSceneName = Settings.menuSceneName;
+            StartCoroutine(ChangeScene(menuSceneName));
+            ChangeStateTo(SimulationState.MENU);
+            // reset laps, lap times, etc
+        }
     }
     
     private void Start()

@@ -38,7 +38,6 @@ public class RaceControlMenuController : MonoBehaviour
         vehFlagDropdown.onValueChanged.AddListener(delegate { vehFlagChanged(); } );
 
         vehFlagChanged();
-
     }
 
     void Update()
@@ -47,9 +46,42 @@ public class RaceControlMenuController : MonoBehaviour
         {
             vehFlagChanged();
             trackFlagChanged();
+
+            if(GameManager.Instance.Settings.shouldStartWithGreenFlag &&
+                GameManager.Instance.Settings.greenFlagDelay == 0.0f)
+            {
+                setGreenFlag();
+            }
+            else if(GameManager.Instance.Settings.shouldStartWithGreenFlag)
+            {
+                StartCoroutine(DelayedSetGreenFlag());
+            }
+
+            bool isPractice = GameManager.Instance.Settings.isPracticeRun;
+            float runTimeout = GameManager.Instance.Settings.maxRunTime;
+            if(runTimeout > 0f && !isPractice)
+            {
+                StartCoroutine(RunTimeout());
+            }
+
             initialized = true;
         }
     }
+
+    private IEnumerator DelayedSetGreenFlag()
+    {
+        yield return new WaitForSeconds(GameManager.Instance.Settings.greenFlagDelay);
+        setGreenFlag();
+    }
+
+    private IEnumerator RunTimeout()
+    {
+        yield return new WaitForSeconds(GameManager.Instance.Settings.maxRunTime);
+        Debug.Log($"Reset due to max run length exceeded ({GameManager.Instance.Settings.maxRunTime}s)", this);
+        GameManager.Instance.OnResetEvent(GameResetReason.Timeout);
+    }
+
+
     void OnDisable()
     {
         initialized = false;
@@ -64,6 +96,13 @@ public class RaceControlMenuController : MonoBehaviour
             raceControl.rc.TrackFlag = (byte)track_flag_vec[idx];
         }
     }
+
+    void setGreenFlag()
+    {
+        trackFlagDropdown.value = 2;
+        trackFlagChanged();
+    }
+
     void vehFlagChanged()
     {
         // All cars get same vehicle flag

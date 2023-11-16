@@ -32,6 +32,8 @@ namespace Autonoma
         Frame msg;
         static IPublisher<Frame> publisher;
 
+        public uint counter = 0;
+
         public CanPublisher(String canMsgName, String rosNamespace, QoSSettings qos)
         {
             this.canMsgName = canMsgName;
@@ -51,12 +53,17 @@ namespace Autonoma
             }
         }
 
+        public float GetCounterNext()
+        {
+            return counter++;
+        }
+
         public void Publish(List<double> values)
         {
             if(values.Count != msgDef.signals.Count)
             {
-                //Debug.Log("CAN signal count mismatch " + Convert.ToString(msgDef.signals.Count)  + " in def" + 
-                //    "for can pub " + canMsgName, null);
+                Debug.Log("CAN signal count mismatch " + Convert.ToString(msgDef.signals.Count)  + " in def" + 
+                    "for can pub " + canMsgName, null);
             }
 
             // old way
