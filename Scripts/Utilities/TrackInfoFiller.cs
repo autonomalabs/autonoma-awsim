@@ -16,6 +16,7 @@ out of or in connection with the software or the use of the software.
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEditor;
 
 public class TrackInfoFiller : MonoBehaviour
 {
@@ -54,6 +55,7 @@ public class TrackInfoFiller : MonoBehaviour
             trackParams.trackInfo.innerY.Add(transform.position.y);
             trackParams.trackInfo.heading.Add(transform.eulerAngles.y);
             prevPos = transform.position;
+            EditorUtility.SetDirty(trackParams.trackInfo);
         }        
     }
 }
