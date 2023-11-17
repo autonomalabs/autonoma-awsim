@@ -152,7 +152,6 @@ public class VehicleDataPublisher : Publisher<VehicleData>
             canMiscReportPublisher.GetCounterNext()// rolling counter missing here?
         });
 
-
         canAccelReportPublisher.Publish(new List<double>{
             canAccelReportPublisher.GetCounterNext(), // counter
             vehSim.accel_pedal_output
@@ -162,8 +161,6 @@ public class VehicleDataPublisher : Publisher<VehicleData>
             canSteerReportPublisher.GetCounterNext(), // counter
             vehSim.steering_wheel_angle
         });
-
-        Debug.Log($"publishing steer angle {vehSim.steering_wheel_angle}");
 
         canBrakePressureReportPublisher.Publish(new List<double>{
             canBrakePressureReportPublisher.GetCounterNext(), // counter
