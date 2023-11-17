@@ -65,7 +65,10 @@ public class Publisher<T> : MonoBehaviour, IPublisherBase where T : ROS2.Message
         fillMsg();
         // Update msg header.
         var header = msg as MessageWithHeader;
-        SimulatorROS2Node.UpdateROSTimestamp(ref header);
+        if(header != null)
+        {
+            SimulatorROS2Node.UpdateROSTimestamp(ref header);
+        }
         // Publish to ROS2.
         publisher.Publish(msg);
         OnPublishMessage();
