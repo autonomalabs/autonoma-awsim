@@ -33,6 +33,8 @@ public class GameManager : MonoBehaviour
     public SettingsManager Settings {get; private set;}
     public BaseUIManager UIManager {get; private set;}
 
+    public String drivingSceneName = "CompetitionDrivingScene";
+
     public delegate void OnResetEventDelegate(GameResetReason reason);
 
     public OnResetEventDelegate onGameResetDelegate;
@@ -111,7 +113,7 @@ public class GameManager : MonoBehaviour
 
         if( Status == SimulationState.RESTART )
         {
-            StartCoroutine(ChangeScene("DrivingScene"));
+            StartCoroutine(ChangeScene(drivingSceneName));
             Status = SimulationState.DRIVE;
         } 
     }
