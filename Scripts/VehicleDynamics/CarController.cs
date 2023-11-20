@@ -40,6 +40,7 @@ public class CarController : MonoBehaviour
     public bool physicalActuator = false;
     public VehicleState vehicleState;
     public Powertrain powertrain;
+    public float dragForceMultiplier = 1.0f;
     void getState()
     {
         // take values from unity system and transform into VD coords
@@ -148,7 +149,7 @@ public class CarController : MonoBehaviour
         float aeroForce = -0.6f*vehicleParams.Af*V.x*V.x;
         frontDownforce.y  = aeroForce*vehicleParams.ClF;
         rearDownforce.y = aeroForce*vehicleParams.ClR;
-        dragForce.z = aeroForce*vehicleParams.Cd*Mathf.Sign(V.x);
+        dragForce.z = aeroForce*vehicleParams.Cd*Mathf.Sign(V.x) * dragForceMultiplier;
         frontDownforceGlobal = transform.TransformDirection(frontDownforce);
         rearDownforceGlobal  = transform.TransformDirection(rearDownforce);
         dragForceGlobal = transform.TransformDirection(dragForce);
