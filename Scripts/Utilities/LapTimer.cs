@@ -23,6 +23,7 @@ public class LapTimer : MonoBehaviour
 
     public int minIdxPrev;
     public List<float> laptimes;
+    bool hasStartedLap = false;
     public float currLaptime;
 
     public bool newLapDetected;
@@ -58,30 +59,18 @@ public class LapTimer : MonoBehaviour
             }
             else
             {
-                if(GameManager.Instance.Settings.useLapTimeInterpolationAdjustment)
+                if (hasStartedLap)
                 {
-                    // get car V to interp lap time
-                    float dist = trackPosition.minDist;
-                    // subtract from laptime dist / speed
-                    float speed = GetVehicleForLap().GetSpeed();
-                    if(speed > 0.0f)
-                    {
-                        float adjustment = dist / speed;
-                        if(adjustment > 0.0 && adjustment < 0.1) // prevent erroneous adjustments
-                        {
-                            currLaptime -= adjustment;
-                        }
-                    }
-                    //Debug.Log($"adjusted lap time by {adjustment}s");
-                }
-
-                if ( currLaptime > 90f )
-                {
+                    InterpolateLapTime();
                     laptimes.Add(currLaptime);
                     if(onLapCompleted != null)
                     {
                         onLapCompleted(currLaptime);
                     }
+                }
+                else
+                {
+                    hasStartedLap = true;
                 }
             }
           
@@ -112,6 +101,31 @@ public class LapTimer : MonoBehaviour
             raceControl.LapTime = currLaptime;
         }
         minIdxPrev = trackPosition.minIdx;
+    }
+
+    public int GetLapCount()
+    {
+        return laptimes.Count - 1;
+    }
+
+    public void InterpolateLapTime()
+    {
+        if(GameManager.Instance.Settings.useLapTimeInterpolationAdjustment)
+        {
+            // get car V to interp lap time
+            float dist = trackPosition.minDist;
+            // subtract from laptime dist / speed
+            float speed = GetVehicleForLap().GetSpeed();
+            if(speed > 0.0f)
+            {
+                float adjustment = dist / speed;
+                if(adjustment > 0.0 && adjustment < 0.1) // prevent erroneous adjustments
+                {
+                    currLaptime -= adjustment;
+                }
+            }
+            //Debug.Log($"adjusted lap time by {adjustment}s");
+        }
     }
 
     CarController GetVehicleForLap()
