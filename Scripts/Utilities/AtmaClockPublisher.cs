@@ -35,9 +35,14 @@ public class AtmaClockPublisher : Publisher<rosgraph_msgs.msg.Clock>
 
     public override void fillMsg()
     {
-       TimeSpan t = (DateTime.UtcNow - new DateTime(1970, 1, 1));
-        msg.Clock_.Sec = (int)t.TotalSeconds;
-        msg.Clock_.Nanosec = (uint)((t.TotalSeconds - (uint)t.TotalSeconds) / 1.0e-9);
+       //TimeSpan t = (DateTime.UtcNow - new DateTime(1970, 1, 1));
+        //msg.Clock_.Sec = (int)t.TotalSeconds;
+        //msg.Clock_.Nanosec = (uint)((t.TotalSeconds - (uint)t.TotalSeconds) / 1.0e-9);
+
+        float t = Time.time;
+        msg.Clock_.Sec = (int)t;
+        msg.Clock_.Nanosec = (uint)((t - (uint)t) / 1.0e-9);
+
     }
 }
 
