@@ -35,6 +35,8 @@ public class HUDManager : MonoBehaviour
     public Button resetButton;
     public int FLTemp, FRTemp, RLTemp, RRTemp;
     public LapTimer lapTimer;
+
+    public bool wantsToReset = false;
     
     void Start()
     {
@@ -69,8 +71,9 @@ public class HUDManager : MonoBehaviour
     }
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.R))
+        if (Input.GetKeyDown(KeyCode.R) || wantsToReset)
         {
+            wantsToReset = false;
             resetButtonPressed();
         }
         hudRpm = HelperFunctions.lowPassFirstOrder(carController.rpmEngine,rpmPrev, 15f);
