@@ -29,6 +29,9 @@ public class RaceControlMenuController : MonoBehaviour
     public int[] track_flag_vec = {3,9,1};
     public int[] veh_flag_vec = {0,25,7,34,4,33};
     bool initialized = false;
+
+    int desiredFlag = 0;
+
     void Start()
     {
         trackFlagDropdown.onValueChanged.AddListener(delegate { trackFlagChanged(); } );
@@ -66,6 +69,12 @@ public class RaceControlMenuController : MonoBehaviour
 
             initialized = true;
         }
+
+        if(desiredFlag != trackFlagDropdown.value)
+        {
+            trackFlagDropdown.value = desiredFlag;
+            trackFlagChanged();
+        }
     }
 
     private IEnumerator DelayedSetGreenFlag()
@@ -97,10 +106,19 @@ public class RaceControlMenuController : MonoBehaviour
         }
     }
 
-    void setGreenFlag()
+    public void setGreenFlag()
     {
-        trackFlagDropdown.value = 2;
-        trackFlagChanged();
+        desiredFlag = 2;
+    }
+
+    public void setRedFlag()
+    {
+        desiredFlag = 0;
+    }
+
+    public void setYellowFlag()
+    {
+        desiredFlag = 1;
     }
 
     void vehFlagChanged()
