@@ -38,6 +38,9 @@ public class GameManager : MonoBehaviour
     public delegate void OnResetEventDelegate(GameResetReason reason);
 
     public OnResetEventDelegate onGameResetDelegate;
+
+    public bool hasResetEvent = false;
+    GameResetReason pendingResetEventReason;
     
     public enum SimulationState
     {
@@ -66,6 +69,12 @@ public class GameManager : MonoBehaviour
         Settings = GetComponentInChildren<SettingsManager>();
 
         return;
+    }
+
+    public void TriggerResetEvent(GameResetReason reason)
+    {
+        hasResetEvent = true;
+        pendingResetEventReason = reason;
     }
 
     public void OnResetEvent(GameResetReason reason)
@@ -115,7 +124,13 @@ public class GameManager : MonoBehaviour
         {
             StartCoroutine(ChangeScene(drivingSceneName));
             Status = SimulationState.DRIVE;
-        } 
+        }
+
+        if(hasResetEvent)
+        {
+            OnResetEvent(pendingResetEventReason);
+            hasResetEvent = false;
+        }
     }
 
     public IEnumerator ChangeScene(string newScene)
