@@ -884,7 +884,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd00d7d442823fcbb199a7df27e0e1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  printDebug: 1
+  printDebug: 0
   drawDebugGizmos: 1
   draftParams: {fileID: 11400000, guid: 3b8649c1444443a269a4c4b29e561be4, type: 2}
   maxDraftDistance: 14
