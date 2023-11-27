@@ -24,6 +24,7 @@ public class LapTimer : MonoBehaviour
     public int minIdxPrev;
     public List<float> laptimes;
     bool hasStartedLap = false;
+    bool hasCompletedRace = false;
     public float currLaptime;
 
     public bool newLapDetected;
@@ -85,9 +86,10 @@ public class LapTimer : MonoBehaviour
             bool isPractice = GameManager.Instance.Settings.isPracticeRun;
             int maxLaps = GameManager.Instance.Settings.maxLaps;
 
-            if(!isPractice && maxLaps > 0 && laptimes.Count - 1 == maxLaps)
+            if(!isPractice && maxLaps > 0 && laptimes.Count - 1 == maxLaps && !hasCompletedRace)
             {
                 Debug.Log($"Reset due to max laps reached ({maxLaps})", this);
+                hasCompletedRace = true;
                 GameManager.Instance.OnResetEvent(GameResetReason.RaceComplete);
             }
 
