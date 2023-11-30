@@ -404,6 +404,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   vehiclePrefab: {fileID: 4673780222355969112, guid: 3336f833e9bcf440b83d43c89da08bf0, type: 3}
+  vehiclePrefabLowPoly: {fileID: 1093341664584056869, guid: 6824caacdfb034f1fa4034ba5e523c2e, type: 3}
   materials:
   - {fileID: 2100000, guid: 9880c9adf0e013c42bbc176e05cd544e, type: 2}
   - {fileID: 2100000, guid: 6de6ffd28aef1724a94edfe55836b35f, type: 2}

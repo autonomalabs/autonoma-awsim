@@ -552,8 +552,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   myTrackParams: {fileID: 0}
-  shouldBypassMenu: 1
-  shouldStartWithGreenFlag: 1
+  shouldBypassMenu: 0
+  shouldStartWithGreenFlag: 0
 --- !u!1 &1346243134
 GameObject:
   m_ObjectHideFlags: 0
