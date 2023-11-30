@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: LVMSParams
   m_EditorClassIdentifier: 
   TrackName: LVMS
-  LAT_ORIGIN: 0
-  LON_ORIGIN: 0
-  HEIGHT_ORIGIN: 0
+  LAT_ORIGIN: 36.27222469
+  LON_ORIGIN: -115.0102968
+  HEIGHT_ORIGIN: 605.0
   trackRotation: {x: 0, y: 0, z: 0}
   carRotation: {x: 0, y: 230, z: 0}
   trackScaling: {x: 1, y: 1, z: 1}
